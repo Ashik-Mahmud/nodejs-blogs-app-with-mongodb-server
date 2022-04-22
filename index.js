@@ -27,11 +27,8 @@ async function run(){
         })
         /* Get data on MongoDB  */
         app.get("/blogs", async(req, res) =>{
-            const queryText = req.query?.title?.toLowerCase();
-            console.log(queryText);
             const result = await blogCollection.find({});
             const blogsData = await result.toArray();
-            const filteredData = blogsData.filter(blog => blog.title.toLowerCase().includes(queryText))
             res.send(blogsData);
            
         })
