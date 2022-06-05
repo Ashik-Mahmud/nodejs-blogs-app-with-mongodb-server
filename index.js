@@ -70,6 +70,35 @@ async function run(){
         })
 
 
+        /* Add Comment On POST */
+        const commentCollection = client.db("blogs-db").collection("comments");
+    
+        app.post("/comment", async(req, res) =>{
+            const data = req.body;            
+            const result = await commentCollection.insertOne(data);
+            if(result.acknowledged){
+                res.send({success: true, message: "Comment Successfully done."})
+            }
+        });
+
+        app.delete("/comment/:id", async(req, res) =>{
+            const deletedId = req.params.id;
+            const result = await commentCollection.deleteOne({_id: ObjectId(deletedId)});
+            if(result.acknowledged){
+                res.send({success: true, message: "Comment Deleted."})
+            }
+            
+        })
+        
+        app.get("/comments", async(req, res) =>{
+            const postId = req.query.postId;
+            const query = {postId: postId};
+            const result = await commentCollection.find(query).toArray();
+            res.send({success: true, result})
+            
+        })
+
+
 
 
     }finally{
